@@ -1,5 +1,5 @@
 import { getAllInterviewReports, generateInterviewReport, getInterviewReportById, generateResumePdf, deleteInterviewReportById } from "../services/interview.api"
-import { useContext, useEffect } from "react"
+import { useCallback, useContext, useEffect } from "react"
 import { InterviewContext } from "../interview.context"
 import { useParams } from "react-router"
 
@@ -27,10 +27,10 @@ export const useInterview = () => {
             setLoading(false)
         }
 
-        return response.interviewReport
+        return response?.interviewReport ?? null
     }
 
-    const getReportById = async (interviewId) => {
+    const getReportById = useCallback(async (interviewId) => {
         setLoading(true)
         let response = null
         try {
@@ -41,10 +41,11 @@ export const useInterview = () => {
         } finally {
             setLoading(false)
         }
-        return response.interviewReport
-    }
 
-    const getReports = async () => {
+        return response?.interviewReport ?? null
+    }, [setLoading, setReport])
+
+    const getReports = useCallback(async () => {
         setLoading(true)
         let response = null
         try {
@@ -56,8 +57,8 @@ export const useInterview = () => {
             setLoading(false)
         }
 
-        return response.interviewReports
-    }
+        return response?.interviewReports ?? []
+    }, [setLoading, setReports])
 
     const getResumePdf = async (interviewReportId) => {
         setLoading(true)
@@ -101,7 +102,7 @@ export const useInterview = () => {
         } else {
             getReports()
         }
-    }, [ interviewId ])
+    }, [ interviewId, getReportById, getReports ])
 
     return { loading, report, reports, generateReport, getReportById, getReports, getResumePdf, deleteReportById }
 
