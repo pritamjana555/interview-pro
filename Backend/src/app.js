@@ -14,7 +14,9 @@ app.use(express.json())
 app.use(cookieParser())
 app.use(cors({
     origin: function (origin, callback) {
-        if (!origin || allowedOrigins.includes(origin)) {
+        if (!origin || 
+            allowedOrigins.includes(origin) || 
+            (origin && origin.includes('.vercel.app'))) {
             callback(null, true)
         } else {
             callback(new Error("Not allowed by CORS"))
