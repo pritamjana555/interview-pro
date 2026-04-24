@@ -3,6 +3,7 @@ import { useNavigate, Link } from 'react-router'
 import "../auth.form.scss"
 import { useAuth } from '../hooks/useAuth'
 
+
 const Login = () => {
 
     const { loading, handleLogin } = useAuth()
@@ -13,8 +14,10 @@ const Login = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault()
-        await handleLogin({email,password})
-        navigate('/')
+        const isSuccess = await handleLogin({email,password})
+        if (isSuccess) {
+            navigate('/interview')
+        }
     }
 
     if(loading){
